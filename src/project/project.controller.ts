@@ -6,11 +6,15 @@ import {
   NotFoundException,
   Param,
   Post,
+  Request,
+  UseGuards,
   Version,
 } from '@nestjs/common';
 import { CreateProjectDto } from './dto';
 import { ProjectService } from './project.service';
 import { Project } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtRequestPayload } from 'src/auth/types/auth';
 
 // Frogged is synonymous with abandoned. This is because unraveling a project is
 // makes a ribbiting sound.
@@ -45,12 +49,18 @@ export class ProjectController {
     return project;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Version('1')
   @Post()
-  async create(@Body() createProjectDto: CreateProjectDto): Promise<Project> {
+  async create(
+    @Body() createProjectDto: CreateProjectDto,
+    @Request() req: { user: JwtRequestPayload },
+  ): Promise<Project> {
+    const { userId } = req.user;
+
     const createData = {
       ...createProjectDto,
-      authorId: 'cowman',
+      authorId: userId,
       status: projectStatusList.findIndex(
         (status) => status === createProjectDto.status,
       ),

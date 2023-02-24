@@ -7,6 +7,7 @@ import {
   Get,
 } from '@nestjs/common';
 import { ReturnedUserDto } from 'src/user/dto';
+import { JwtRequestPayload } from './types/auth';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
@@ -25,8 +26,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Version('1')
   @Get('profile')
-  getProfile(@Request() req: any) {
-    console.log('cowman123', req.user);
+  getProfile(@Request() req: { user: JwtRequestPayload }) {
     return req.user;
   }
 }
