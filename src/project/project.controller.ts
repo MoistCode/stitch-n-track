@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { CreateProjectDto } from './dto';
 import { ProjectService } from './project.service';
+import { Project } from '@prisma/client';
 
 // Frogged is synonymous with abandoned. This is because unraveling a project is
 // makes a ribbiting sound.
@@ -28,7 +29,7 @@ export class ProjectController {
 
   @Version('1')
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<Project | null> {
     let project;
 
     try {
@@ -46,7 +47,7 @@ export class ProjectController {
 
   @Version('1')
   @Post()
-  create(@Body() createProjectDto: CreateProjectDto) {
+  async create(@Body() createProjectDto: CreateProjectDto): Promise<Project> {
     const createData = {
       ...createProjectDto,
       authorId: 'cowman',
