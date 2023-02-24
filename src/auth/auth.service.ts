@@ -12,10 +12,10 @@ export class AuthService {
   ) {}
 
   async validateUser(
-    username: string,
+    email: string,
     password: string,
   ): Promise<ReturnedUserDto | null> {
-    const user = await this.userService.findOne({ username });
+    const user = await this.userService.findOne({ email });
 
     if (!user) {
       return null;
@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   async login(user: ReturnedUserDto): Promise<{ accessToken: string }> {
-    const payload = { username: user.username, sub: user.id };
+    const payload = { email: user.email, sub: user.id };
 
     return {
       accessToken: this.jwtService.sign(payload),

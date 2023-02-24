@@ -37,7 +37,7 @@ export class UserController {
     }
 
     const createData = {
-      username: createUserDto.username,
+      email: createUserDto.email,
       hash,
     };
 

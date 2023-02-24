@@ -1,9 +1,9 @@
 export type JwtResponsePayload = {
-  username: string;
+  email: string;
   sub: string;
 };
 
 export type JwtRequestPayload = {
-  username: string;
+  email: string;
   userId: string;
 };
